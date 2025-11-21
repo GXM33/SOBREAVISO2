@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Sobreaviso DRV/DEIC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      color: #111827;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2563eb;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    textarea {
+      width: 100%;
+      height: 280px;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      resize: vertical;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 14px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .btn-copy { background: #2563eb; color: #fff; }
+    .btn-copy:hover { background: #1d4ed8; }
+
+    .btn-wa { background: #16a34a; color: #fff; }
+    .btn-wa:hover { background: #15803d; }
+
+    .btn-clear { background: #6b7280; color: #fff; }
+    .btn-clear:hover { background: #4b5563; }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 16px; }
+      textarea { height: 220px; }
+      .buttons { flex-direction: column; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📋 Gerador de Sobreaviso DRV/DEIC</h1>
+
+    <label for="data-select">📅 Selecione a data de novembro/2025:</label>
+    <select id="data-select">
+      <option value="">-- Escolha uma data --</option>
+      <option>01/11/2025</option>
+      <option>02/11/2025</option>
+      <option>03/11/2025</option>
+      <option>04/11/2025</option>
+      <option>05/11/2025</option>
+      <option>06/11/2025</option>
+      <option>07/11/2025</option>
+      <option>08/11/2025</option>
+      <option>09/11/2025</option>
+      <option>10/11/2025</option>
+      <option>11/11/2025</option>
+      <option>12/11/2025</option>
+      <option>13/11/2025</option>
+      <option>14/11/2025</option>
+      <option>15/11/2025</option>
+      <option>16/11/2025</option>
+      <option>17/11/2025</option>
+      <option>18/11/2025</option>
+      <option>19/11/2025</option>
+      <option>20/11/2025</option>
+      <option>21/11/2025</option>
+      <option>22/11/2025</option>
+      <option>23/11/2025</option>
+      <option>24/11/2025</option>
+      <option>25/11/2025</option>
+      <option>26/11/2025</option>
+      <option>27/11/2025</option>
+      <option>28/11/2025</option>
+      <option>29/11/2025</option>
+      <option>30/11/2025</option>
+    </select>
+
+    <textarea id="output" placeholder="O texto do sobreaviso aparecerá aqui..." readonly></textarea>
+
+    <div class="buttons">
+      <button class="btn-copy" id="btn-copy">📋 Copiar texto</button>
+      <button class="btn-wa" id="btn-wa">💚 Enviar no WhatsApp</button>
+      <button class="btn-clear" id="btn-clear">🗑️ Limpar</button>
+    </div>
+
+    <div class="footer">
+      <p>Gerador de Sobreaviso DRV/DEIC - Novembro 2025</p>
+    </div>
+  </div>
+
+  <script>
+    const phoneMapping = {
+      "Cau": "Insp. Acauã (51) 986859065",
+      "PIAZZA": "Esc. Fernanda Piazza (51) 993605744",
+      "Piazza": "Esc. Fernanda Piazza (51) 993605744",
+      "CRISTIANO": "Insp. Cristiano Soletti (51) 995659880",
+      "Cristiano": "Insp. Cristiano Soletti (51) 995659880",
+      "TERESINHA": "Insp. Teresinha Carivali (51) 999829606",
+      "Teresinha": "Insp. Teresinha Carivali (51) 999829606",
+      "Thiago": "Insp. Thiago Meireles (79) 988080613",
+      "CESAR": "Esc. César da Costa (51) 998911160",
+      "CÉSAR": "Esc. César da Costa (51) 998911160",
+      "Vanessa": "Insp. Vanessa Trindade (55) 984278960",
+      "VANESSA": "Insp. Vanessa Trindade (55) 984278960",
+      "BONA": "Insp. Juliano Bonacina (51) 989276060",
+      "Bona": "Insp. Juliano Bonacina (51) 989276060",
+      "GUI MELLO": "Insp. Guilherme Mello (51) 981354933",
+      "Gui Mello": "Insp. Guilherme Mello (51) 981354933",
+      "Tais": "Insp. Tais Boesing (51) 980549435",
+      "TAIS": "Insp. Tais Boesing (51) 980549435",
+      "JEFF": "Esc. Jefferson Antoniol (24) 981002933",
+      "Jeff": "Esc. Jefferson Antoniol (24) 981002933",
+      "Luciana": "Esc. Luciana Bortoli (51) 993935552",
+      "LUCIANA": "Esc. Luciana Bortoli (51) 993935552",
+      "Edna": "Insp. Edna Moraes (53) 981339654",
+      "EDNA": "Insp. Edna Moraes (53) 981339654",
+      "Saraiva": "Esc. Anderson Saraiva (51) 993879343",
+      "SARAIVA": "Esc. Anderson Saraiva (51) 993879343",
+      "LOSS": "Insp. Lucas Loss (51) 991055571",
+      "Loss": "Insp. Lucas Loss (51) 991055571",
+      "BROZOZA": "Insp. Alexandre Brozoza (51) 996500506",
+      "Brozoza": "Insp. Alexandre Brozoza (51) 996500506",
+      "DAGO": "Esc. Dagoberto O. das Virgens (51) 999920066",
+      "Dago": "Esc. Dagoberto O. das Virgens (51) 999920066",
+      "THÁSSIA": "Insp. Thássia Guterres (51) 996499862",
+      "Thássia": "Insp. Thássia Guterres (51) 996499862",
+      "Juliana": "Insp. Juliana Tremper (51) 993337587",
+      "JULIANA": "Insp. Juliana Tremper (51) 993337587",
+      "Cátia": "Esc. Cátia Fortunato (51) 985744501",
+      "CÁTIA": "Esc. Cátia Fortunato (51) 985744501",
+      "MELO": "Insp. Edmilson Melo (51) 983190815",
+      "Melo": "Insp. Edmilson Melo (51) 983190815"
+    };
+
+    const schedule = {
+      "01/11/2025": ["CRISTIANO", "VANESSA", "Thiago"],
+      "02/11/2025": ["CRISTIANO", "VANESSA", "Thiago"],
+      "03/11/2025": ["PIAZZA", "CESAR", "VANESSA"],
+      "04/11/2025": ["BONA", "VANESSA", "Saraiva"],
+      "05/11/2025": ["DAGO", "THÁSSIA", "Thiago"],
+      "06/11/2025": ["JEFF", "TERESINHA", "Saraiva"],
+      "07/11/2025": ["CRISTIANO", "TERESINHA", "Thiago"],
+      "08/11/2025": ["JEFF", "JULIANA", "Tais"],
+      "09/11/2025": ["JEFF", "LUCIANA", "Edna"],
+      "10/11/2025": ["GUI MELLO", "BONA", "Tais"],
+      "11/11/2025": ["BROZOZA", "LOSS", "Saraiva"],
+      "12/11/2025": ["Cau", "LUCIANA", "Edna"],
+      "13/11/2025": ["MELO", "Cátia", "JEFF"],
+      "14/11/2025": ["PIAZZA", "BONA", "Saraiva"],
+      "15/11/2025": ["GUI MELLO", "THÁSSIA", "Saraiva"],
+      "16/11/2025": ["GUI MELLO", "LOSS", "Saraiva"],
+      "17/11/2025": ["CESAR", "TERESINHA", "JEFF"],
+      "18/11/2025": ["DAGO", "Cátia", "Edna"],
+      "19/11/2025": ["JEFF", "THÁSSIA", "Saraiva"],
+      "20/11/2025": ["CRISTIANO", "JULIANA", "Thiago"],
+      "21/11/2025": ["GUI MELLO", "MELO", "Thiago"],
+      "22/11/2025": ["BROZOZA", "LOSS", "Thiago"],
+      "23/11/2025": ["BROZOZA", "LOSS", "Thiago"],
+      "24/11/2025": ["Cau", "LUCIANA", "Saraiva"],
+      "25/11/2025": ["BROZOZA", "LOSS", "VANESSA"],
+      "26/11/2025": ["MELO", "VANESSA", "JEFF"],
+      "27/11/2025": ["PIAZZA", "GUI MELLO", "Tais"],
+      "28/11/2025": ["CESAR", "JULIANA", "VANESSA"],
+      "29/11/2025": ["Cau", "LUCIANA", "Edna"],
+      "30/11/2025": ["Cau", "JULIANA", "Edna"]
+    };
+
+    const selectEl = document.getElementById("data-select");
+    const outputEl = document.getElementById("output");
+    const btnCopy = document.getElementById("btn-copy");
+    const btnWa = document.getElementById("btn-wa");
+    const btnClear = document.getElementById("btn-clear");
+
+    function formatPerson(nameRaw) {
+      return phoneMapping[nameRaw] || nameRaw;
+    }
+
+    function buildMessage(dateStr) {
+      const escala = schedule[dateStr];
+      if (!escala) return "";
+      const [sa01, sa02, saNac] = escala;
+      const p1 = formatPerson(sa01);
+      const p2 = formatPerson(sa02);
+      const pNac = formatPerson(saNac);
+
+      return (
+`*Sobreaviso DRV/DEIC*
+Data: ${dateStr}
+
+${p1}
+${p2}
+
+NAC:
+${pNac}
+
+Assuntos gerais e atendimento ao público - WhatsApp Secretaria:
+(51) 984044887
+
+Chefe de SI:
+Com. Bruna Caldeira 51 99139-9403
+
+Autoridade Policial:
+Delegada Jeiselaure Rocha de Souza (51) 99145-8919`
+      );
+    }
+
+    selectEl.addEventListener("change", () => {
+      const date = selectEl.value;
+      outputEl.value = date ? buildMessage(date) : "";
+    });
+
+    btnCopy.addEventListener("click", () => {
+      if (!outputEl.value) return;
+      outputEl.select();
+      document.execCommand("copy");
+      window.getSelection().removeAllRanges();
+      alert("✅ Texto copiado para a área de transferência!");
+    });
+
+    btnWa.addEventListener("click", () => {
+      if (!outputEl.value) {
+        alert("⚠️ Selecione uma data antes de enviar para o WhatsApp.");
+        return;
+      }
+      const encoded = encodeURIComponent(outputEl.value);
+      window.open("https://wa.me/?text=" + encoded, "_blank");
+    });
+
+    btnClear.addEventListener("click", () => {
+      selectEl.value = "";
+      outputEl.value = "";
+    });
+  </script>
+</body>
+</html>
